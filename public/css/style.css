@@ -2143,19 +2143,27 @@ input[type="file"].form-control {
 .modal-close-btn {
   background: none;
   border: none;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
   font-size: 1.35rem;
+  line-height: 1;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .modal-close-btn:hover {
   background: #e2e8f0;
   color: var(--navy-primary);
+  transform: scale(1.06);
 }
 
 .modal-body {
