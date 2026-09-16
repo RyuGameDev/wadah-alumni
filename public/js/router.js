@@ -644,8 +644,16 @@ const Router = {
       return;
     }
 
-    const res = await App.apiRequest('/api/alumni');
-    const alumniList = res.data || [];
+    let alumniList = [];
+    try {
+      const res = await App.apiRequest('/api/alumni');
+      alumniList = res.data || [];
+    } catch (err) {
+      if (!App.state.user || err.message.includes('Sesi') || err.message.includes('Token') || err.message.includes('Akses') || err.message.includes('otentikasi')) {
+        return this.renderAlumni(container);
+      }
+      throw err;
+    }
 
     container.innerHTML = `
       <div class="container section">

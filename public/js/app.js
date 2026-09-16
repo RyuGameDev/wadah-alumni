@@ -70,7 +70,7 @@ const App = {
     }
   },
 
-  // Helper request API dengan token otomatis
+  // Helper request API dengan token otomatis & error handling aman
   async apiRequest(url, options = {}) {
     const headers = {
       'Content-Type': 'application/json',
@@ -83,7 +83,29 @@ const App = {
 
     try {
       const response = await fetch(url, { ...options, headers });
-      const data = await response.json();
+      
+      let data = {};
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch (parseErr) {
+          data = { message: 'Format respons tidak valid.' };
+        }
+      } else {
+        const textResp = await response.text();
+        data = { message: textResp || 'Terjadi kesalahan pada server.' };
+      }
+
+      if (response.status === 401) {
+        this.state.token = null;
+        this.state.user = null;
+        localStorage.removeItem('grida_token');
+        localStorage.removeItem('grida_user');
+        this.renderHeaderUserStatus();
+        throw new Error(data.message || 'Sesi telah berakhir atau Anda belum login.');
+      }
+
       if (!response.ok) {
         throw new Error(data.message || 'Terjadi kesalahan saat memproses permintaan.');
       }
