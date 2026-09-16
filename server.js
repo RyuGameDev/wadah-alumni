@@ -81,7 +81,7 @@ const schoolInfoHandler = (req, res) => {
       website: 'www.smapgri2jombang.sch.id',
       instagram: '@smapgri2jombang_official',
       youtube: 'SMA Grida Joe',
-      logo_url: 'https://p.taplink.st/a/5/7/c/3/c54b26.jpg?1',
+      logo_url: '/assets/logo.png',
       storage_type: process.env.TELEGRAM_BOT_TOKEN ? 'Telegram Bot API Storage' : 'Local Fallback Storage (Ready for Telegram)',
     },
   });
