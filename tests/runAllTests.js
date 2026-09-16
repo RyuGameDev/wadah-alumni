@@ -43,7 +43,7 @@ async function run() {
   console.log(`${BOLD}============================================================${RESET}\n`);
 
   let serverInstance = null;
-  let baseUrl = process.env.TEST_BASE_URL;
+  let baseUrl = process.env.TEST_BASE_URL ? process.env.TEST_BASE_URL.trim() : null;
 
   // Jika tidak ada URL eksternal, jalankan server lokal
   if (!baseUrl) {
