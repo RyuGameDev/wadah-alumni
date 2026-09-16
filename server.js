@@ -25,9 +25,14 @@ async function ensureStoreReady() {
   if (!isInit) {
     if (!initPromise) {
       initPromise = (async () => {
-        await connectDB();
-        await initStore();
-        isInit = true;
+        try {
+          await connectDB();
+          await initStore();
+        } catch (e) {
+          console.error('Inisialisasi store gagal:', e.message);
+        } finally {
+          isInit = true;
+        }
       })();
     }
     await initPromise;
@@ -39,22 +44,24 @@ app.use(async (req, res, next) => {
     await ensureStoreReady();
     next();
   } catch (err) {
-    console.error('Inisialisasi store gagal:', err);
+    console.error('Inisialisasi store middleware error:', err);
     next();
   }
 });
 
 // Healthcheck Endpoint API
-app.get('/api', (req, res) => {
+const healthHandler = (req, res) => {
   res.json({
     success: true,
     message: 'Portal Tracer Study & Alumni SMA PGRI 2 Jombang API is active and ready.',
     timestamp: new Date().toISOString(),
   });
-});
+};
+app.get('/api', healthHandler);
+app.get('/api/health', healthHandler);
 
 // Endpoint Informasi Sekolah Resmi SMA PGRI 2 Jombang
-app.get('/api/school-info', (req, res) => {
+const schoolInfoHandler = (req, res) => {
   res.json({
     success: true,
     data: {
@@ -75,19 +82,50 @@ app.get('/api/school-info', (req, res) => {
       storage_type: process.env.TELEGRAM_BOT_TOKEN ? 'Telegram Bot API Storage' : 'Local Fallback Storage (Ready for Telegram)',
     },
   });
-});
+};
+app.get('/api/school-info', schoolInfoHandler);
+app.get('/school-info', schoolInfoHandler);
 
-// Mounting Rute API
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/alumni', require('./routes/alumni'));
-app.use('/api/news', require('./routes/news'));
-app.use('/api/donations', require('./routes/donation'));
-app.use('/api/careers', require('./routes/career'));
-app.use('/api/forum', require('./routes/forum'));
-app.use('/api/gallery', require('./routes/gallery'));
-app.use('/api/upload', require('./routes/upload'));
-app.use('/api/media', require('./routes/upload'));
-app.use('/api/admin', require('./routes/admin'));
+// Mounting Rute API (dengan dan tanpa prefix /api untuk fleksibilitas serverless)
+const authRoutes = require('./routes/auth');
+const alumniRoutes = require('./routes/alumni');
+const newsRoutes = require('./routes/news');
+const donationRoutes = require('./routes/donation');
+const careerRoutes = require('./routes/career');
+const forumRoutes = require('./routes/forum');
+const galleryRoutes = require('./routes/gallery');
+const uploadRoutes = require('./routes/upload');
+const adminRoutes = require('./routes/admin');
+
+app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
+app.use('/api/alumni', alumniRoutes);
+app.use('/alumni', alumniRoutes);
+
+app.use('/api/news', newsRoutes);
+app.use('/news', newsRoutes);
+
+app.use('/api/donations', donationRoutes);
+app.use('/donations', donationRoutes);
+
+app.use('/api/careers', careerRoutes);
+app.use('/careers', careerRoutes);
+
+app.use('/api/forum', forumRoutes);
+app.use('/forum', forumRoutes);
+
+app.use('/api/gallery', galleryRoutes);
+app.use('/gallery', galleryRoutes);
+
+app.use('/api/upload', uploadRoutes);
+app.use('/upload', uploadRoutes);
+
+app.use('/api/media', uploadRoutes);
+app.use('/media', uploadRoutes);
+
+app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 // SPA Catch-all: seluruh rute non-API diarahkan ke index.html
 app.get('*', (req, res) => {

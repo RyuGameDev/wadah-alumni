@@ -11,11 +11,13 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 const TELEGRAM_API_BASE = 'https://api.telegram.org';
 
-// Pastikan direktori uploads lokal ada untuk fallback
-const UPLOAD_DIR = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
+// Pastikan direktori uploads lokal ada untuk fallback (serverless compatible)
+const UPLOAD_DIR = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(__dirname, '..', 'uploads');
+try {
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  }
+} catch (e) {}
 
 /**
  * Upload berkas ke Telegram Bot atau fallback ke lokal jika token belum diisi.
