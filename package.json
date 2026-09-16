@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "seed": "node seed/seedData.js"
+    "seed": "node seed/seedData.js",
+    "test": "node tests/runAllTests.js"
   },
   "keywords": [
     "tracer-study",
@@ -23,6 +24,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^8.7.0",
     "form-data": "^4.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",

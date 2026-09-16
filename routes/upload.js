@@ -7,6 +7,7 @@ const {
   uploadToStorage,
   getTelegramFileStream,
 } = require('../config/telegram');
+const { unauthenticatedUploadLimiter } = require('../middleware/rateLimiter');
 
 // Konfigurasi Multer dengan MemoryStorage dan batas maksimal Telegram Bot
 const upload = multer({
@@ -68,8 +69,8 @@ const handleUpload = (req, res, next) => {
 };
 
 // @route   POST /api/upload
-// @desc    Unggah berkas ke Telegram Bot Storage (dengan fallback lokal jika belum ada token)
-router.post('/', handleUpload, async (req, res) => {
+// @desc    Unggah berkas ke Telegram Bot Storage (dilengkapi proteksi rate limit untuk tamu)
+router.post('/', unauthenticatedUploadLimiter, handleUpload, async (req, res) => {
   try {
     const result = await uploadToStorage(
       req.file.buffer,

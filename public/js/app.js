@@ -158,8 +158,31 @@ const App = {
       body: formData,
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) {
+      if (res.status === 429 || data.code === 'RATE_LIMIT_EXCEEDED') {
+        const errorMsg = data.message || 'Anda terlalu sering mengunggah berkas. Harap login untuk melanjutkan.';
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: errorMsg,
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-sign-in-alt"></i> Masuk Akun Sekarang',
+            cancelButtonText: 'Tutup',
+            confirmButtonColor: '#072242',
+            cancelButtonColor: '#64748b',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              App.openLoginModal();
+            }
+          });
+        } else {
+          alert(errorMsg);
+          App.openLoginModal();
+        }
+        throw new Error(errorMsg);
+      }
       throw new Error(data.message || 'Gagal mengunggah berkas.');
     }
 
