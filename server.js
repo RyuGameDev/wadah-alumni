@@ -44,6 +44,15 @@ app.use(async (req, res, next) => {
   }
 });
 
+// Healthcheck Endpoint API
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Portal Tracer Study & Alumni SMA PGRI 2 Jombang API is active and ready.',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Endpoint Informasi Sekolah Resmi SMA PGRI 2 Jombang
 app.get('/api/school-info', (req, res) => {
   res.json({
