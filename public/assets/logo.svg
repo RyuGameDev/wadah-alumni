@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="50%" stop-color="#0F2B5C"/>
+      <stop offset="100%" stop-color="#061A3A"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#DC2626"/>
+      <stop offset="50%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Pentagon Shield -->
+  <polygon points="100,10 185,45 155,175 100,195 45,175 15,45" fill="url(#blueGrad)" stroke="url(#goldGrad)" stroke-width="4" filter="url(#shadow)"/>
+  
+  <!-- Inner Ring -->
+  <circle cx="100" cy="100" r="62" fill="#FFFFFF" stroke="url(#goldGrad)" stroke-width="3"/>
+  <circle cx="100" cy="100" r="54" fill="#0F2B5C"/>
+
+  <!-- Golden Laurel Wreath / Padi Kapas Leaves -->
+  <path d="M 60,135 Q 52,100 70,68 Q 66,85 75,98" fill="none" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M 140,135 Q 148,100 130,68 Q 134,85 125,98" fill="none" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round"/>
+  
+  <!-- Center Torch & Flame (Simbol PGRI & Ilmu Pengetahuan) -->
+  <!-- Torch Handle -->
+  <polygon points="95,145 105,145 103,115 97,115" fill="url(#goldGrad)"/>
+  <rect x="94" y="112" width="12" height="4" rx="1" fill="#FFFFFF"/>
+  <polygon points="92,112 108,112 105,102 95,102" fill="url(#goldGrad)"/>
+  
+  <!-- Flaming Torch (Api Abadi) -->
+  <path d="M 100,60 C 90,75 88,88 94,98 C 96,88 100,82 100,82 C 100,82 104,88 106,98 C 112,88 110,75 100,60 Z" fill="url(#flameGrad)"/>
+  <path d="M 100,72 C 95,82 96,90 98,96 C 100,90 102,86 102,86 C 102,86 104,90 102,96 C 105,90 105,82 100,72 Z" fill="#FEF08A"/>
+
+  <!-- Text Top Arc: SMA PGRI 2 -->
+  <path id="textArcTop" d="M 38,100 A 62,62 0 0,1 162,100" fill="none"/>
+  <!-- Text Bottom Arc: JOMBANG -->
+  <path id="textArcBottom" d="M 160,105 A 62,62 0 0,1 40,105" fill="none"/>
+  
+  <text fill="#FCD34D" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="2.5">
+    <textPath href="#textArcTop" startOffset="50%" text-anchor="middle">
+      SMA PGRI 2 JOMBANG
+    </textPath>
+  </text>
+  <text fill="#FFFFFF" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="3">
+    <textPath href="#textArcBottom" startOffset="50%" text-anchor="middle">
+      GRIDA JOE • 1982
+    </textPath>
+  </text>
+
+  <!-- Ribbon at bottom -->
+  <path d="M 55,160 L 145,160 L 138,174 L 100,178 L 62,174 Z" fill="url(#goldGrad)" stroke="#78350F" stroke-width="0.8"/>
+  <text x="100" y="171" fill="#0F2B5C" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="8" font-weight="800" text-anchor="middle" letter-spacing="1">
+    SEKOLAHNYA PARA JUARA
+  </text>
+</svg>

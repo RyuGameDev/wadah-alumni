@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Tracer Study & Alumni SMA PGRI 2 Jombang | Sekolahnya Para Juara</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Portal resmi Tracer Study & Jejaring Alumni SMA PGRI 2 Jombang (Grida Joe). Pusat pendataan lulusan, informasi karir, forum diskusi, berita alumni, dan kontribusi almamater.">
+  <meta name="keywords" content="Tracer Study, Alumni SMA PGRI 2 Jombang, Grida Joe, Jombang, Jawa Timur, Jejaring Alumni, Loker Alumni, Donasi">
+  <meta name="author" content="SMA PGRI 2 Jombang">
+  <meta name="theme-color" content="#072242">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       TOP ANNOUNCEMENT BAR & TICKER
+       ============================================================ -->
+  <section class="top-bar">
+    <div class="container">
+      <div class="top-bar-inner">
+        <div class="ticker-wrap">
+          <span class="ticker-badge">
+            <i class="fas fa-bullhorn"></i> WARTA TERKINI
+          </span>
+          <div class="ticker-marquee">
+            <span class="ticker-text">
+              ✨ Selamat datang di Portal Tracer Study & Jejaring Alumni SMA PGRI 2 Jombang ("Grida Joe") — Menempa Jejak Para Juara! • Lengkapi formulir pelacakan kelulusan Anda untuk kemajuan almamater tercinta • Hubungi Humas di (0321) 861234.
+            </span>
+          </div>
+        </div>
+
+        <div class="top-social">
+          <a href="https://www.instagram.com/smapgri2jombang_official" target="_blank" rel="noopener" title="Instagram Resmi"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@smagridajoe" target="_blank" rel="noopener" title="YouTube SMA Grida Joe"><i class="fab fa-youtube"></i></a>
+          <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" title="WhatsApp Center"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MAIN HEADER & STICKY NAVBAR
+       ============================================================ -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Brand Identity -->
+        <a href="#home" class="brand-link">
+          <div class="brand-logo-wrap">
+            <img src="/assets/logo.svg" alt="Logo SMA PGRI 2 Jombang" onerror="this.src='https://p.taplink.st/a/5/7/c/3/c54b26.jpg?1'">
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">SMA PGRI 2 <span>JOMBANG</span></div>
+            <div class="brand-sub">Portal Tracer Study &amp; Alumni Grida Joe</div>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <ul class="nav-links">
+          <li class="nav-item"><a href="#home" class="active"><i class="fas fa-home"></i> Beranda</a></li>
+          <li class="nav-item"><a href="#alumni"><i class="fas fa-users"></i> Cari Alumni</a></li>
+          <li class="nav-item"><a href="#berita"><i class="fas fa-newspaper"></i> Berita</a></li>
+          <li class="nav-item"><a href="#donasi"><i class="fas fa-hand-holding-heart"></i> Donasi</a></li>
+          <li class="nav-item"><a href="#karir"><i class="fas fa-briefcase"></i> Karir &amp; Loker</a></li>
+          <li class="nav-item nav-dropdown">
+            <a href="#forum"><i class="fas fa-comments"></i> Forum <i class="fas fa-chevron-down" style="font-size: 0.65rem; margin-left: 2px;"></i></a>
+            <div class="dropdown-menu">
+              <a href="#forum" class="dropdown-item"><i class="fas fa-list"></i> Semua Diskusi</a>
+              <button type="button" class="dropdown-item" onclick="App.state.user ? Router.openCreateTopicModal() : App.openLoginModal()">
+                <i class="fas fa-pen"></i> Buat Topik Baru
+              </button>
+            </div>
+          </li>
+          <li class="nav-item"><a href="#tracer" style="color: var(--gold-dark); font-weight: 700;"><i class="fas fa-clipboard-list"></i> Tracer Study</a></li>
+        </ul>
+
+        <!-- User Actions (Login / Register / User Avatar) -->
+        <div class="header-actions">
+          <div id="header-auth-actions" style="display: flex; align-items: center; gap: 8px;"></div>
+          <button type="button" class="mobile-toggle" aria-label="Buka Menu Mobile" onclick="App.toggleMobileDrawer(true)">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MOBILE OFF-CANVAS DRAWER
+       ============================================================ -->
+  <div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="App.toggleMobileDrawer(false)"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Menu Navigasi Mobile">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 36px; height: 36px; border-radius: 8px; background: #fff; padding: 2px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);">
+          <img src="/assets/logo.svg" alt="Logo SMA PGRI 2 Jombang" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div>
+          <div style="font-family: var(--font-heading); font-weight: 800; font-size: 0.95rem; line-height: 1.2; color: #fff;">SMA PGRI 2</div>
+          <div style="font-size: 0.68rem; color: var(--gold-primary); font-weight: 700; letter-spacing: 0.5px;">JOMBANG</div>
+        </div>
+      </div>
+      <button type="button" class="mobile-drawer-close" onclick="App.toggleMobileDrawer(false)" aria-label="Tutup Menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <a href="#home" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-home"></i> Beranda</a>
+      <a href="#alumni" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-users"></i> Cari Alumni</a>
+      <a href="#tracer" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)" style="color: var(--gold-dark); font-weight: 700;"><i class="fas fa-clipboard-list" style="color: var(--gold-primary);"></i> Tracer Study</a>
+      <a href="#berita" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-newspaper"></i> Warta Berita</a>
+      <a href="#donasi" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-hand-holding-heart"></i> Program Donasi</a>
+      <a href="#karir" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-briefcase"></i> Karir &amp; Loker</a>
+      <a href="#forum" class="mobile-nav-link" onclick="App.toggleMobileDrawer(false)"><i class="fas fa-comments"></i> Forum Diskusi</a>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
+      <div id="mobile-drawer-auth" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+
+    <div class="mobile-drawer-footer">
+      <div>Motto: <strong>"Sekolahnya Para Juara"</strong></div>
+      <div style="font-size: 0.7rem; margin-top: 4px; color: var(--text-light);">NPSN: 20539726 • IMPRESSIA</div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       DYNAMIC MAIN CONTENT (SPA CONTAINER)
+       ============================================================ -->
+  <main id="main-content"></main>
+
+  <!-- ============================================================
+       INSTITUTIONAL FOOTER
+       ============================================================ -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-top">
+        <!-- Brand Info -->
+        <div class="footer-brand">
+          <h4>SMA PGRI 2 <span>JOMBANG</span></h4>
+          <p>
+            Portal Tracer Study dan Direktori Alumni resmi SMA PGRI 2 Jombang (Grida Joe). Mewujudkan sinergi kokoh antara almamater dan ribuan lulusan berprestasi di seluruh penjuru tanah air.
+          </p>
+          <div class="footer-contact-list">
+            <div class="footer-contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Jl. KH. Ahmad Dahlan No. 23, Kel. Jombatan, Kec. Jombang, Kab. Jombang, Jawa Timur 61419</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-phone-alt"></i>
+              <span>Telepon: (0321) 861234 • WhatsApp: 0812-3456-7890</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@smapgri2jombang.sch.id</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Pintas -->
+        <div class="footer-col">
+          <h5>Menu Utama</h5>
+          <ul class="footer-links">
+            <li><a href="#home">Beranda Utama</a></li>
+            <li><a href="#alumni">Direktori Cari Alumni</a></li>
+            <li><a href="#berita">Warta &amp; Kabar Alumni</a></li>
+            <li><a href="#donasi">Program Donasi Almamater</a></li>
+            <li><a href="#karir">Info Karir &amp; Lowongan Kerja</a></li>
+          </ul>
+        </div>
+
+        <!-- Layanan Alumni -->
+        <div class="footer-col">
+          <h5>Layanan Alumni</h5>
+          <ul class="footer-links">
+            <li><a href="#tracer">Kuesioner Tracer Study</a></li>
+            <li><a href="#forum">Forum Diskusi &amp; Kolaborasi</a></li>
+            <li><a href="javascript:void(0)" onclick="App.openLoginModal()">Masuk Portal Alumni</a></li>
+            <li><a href="javascript:void(0)" onclick="App.openRegisterModal()">Pendaftaran Alumni Baru</a></li>
+            <li><a href="#dashboard">Dashboard Profil Pribadi</a></li>
+          </ul>
+        </div>
+
+        <!-- Media Sosial & Akreditasi -->
+        <div class="footer-col">
+          <h5>Identitas Sekolah</h5>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 16px;">
+            NPSN: <strong>20539726</strong><br>
+            Status: <strong>Swasta Terakreditasi A</strong><br>
+            Motto: <strong>"Sekolahnya Para Juara"</strong><br>
+            Penyimpanan: <strong>Telegram Bot Storage</strong>
+          </p>
+          <div style="display: flex; gap: 8px;">
+            <a href="https://www.instagram.com/smapgri2jombang_official" target="_blank" class="btn btn-outline btn-sm" style="background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.15);">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.youtube.com/@smagridajoe" target="_blank" class="btn btn-outline btn-sm" style="background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.15);">
+              <i class="fab fa-youtube"></i> YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Bottom -->
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 <strong>SMA PGRI 2 Jombang</strong>. Seluruh Hak Cipta Dilindungi Undang-Undang.
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span>Portal Tracer Study v3.2.0 • Grida Joe Digital</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       MOBILE BOTTOM APP BAR (NATIVE APP EXPERIENCE)
+       ============================================================ -->
+  <nav class="mobile-bottom-bar" aria-label="Navigasi Bawah">
+    <a href="#home" class="mobile-tab-item active" data-route="home">
+      <i class="fas fa-home"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="#alumni" class="mobile-tab-item" data-route="alumni">
+      <i class="fas fa-users"></i>
+      <span>Alumni</span>
+    </a>
+    <a href="#tracer" class="mobile-tab-item" data-route="tracer" style="position: relative;">
+      <div style="position: absolute; top: -14px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-hover)); color: #fff; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); border: 2.5px solid #fff;">
+        <i class="fas fa-clipboard-check" style="font-size: 1.05rem; color: #fff; transform: none;"></i>
+      </div>
+      <span style="margin-top: 18px; font-weight: 700;">Tracer</span>
+    </a>
+    <a href="#forum" class="mobile-tab-item" data-route="forum">
+      <i class="fas fa-comments"></i>
+      <span>Forum</span>
+    </a>
+    <a href="javascript:void(0)" onclick="App.state.user ? Router.navigate('dashboard') : App.openLoginModal()" class="mobile-tab-item" data-route="dashboard" id="mobile-tab-auth">
+      <i class="fas fa-user-circle"></i>
+      <span id="mobile-tab-auth-label">Akun</span>
+    </a>
+  </nav>
+
+  <!-- Modal Overlay Container -->
+  <div id="app-modal-overlay" class="modal-overlay"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/app.js"></script>
+  <script src="/js/router.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      App.init();
+    });
+  </script>
+</body>
+</html>

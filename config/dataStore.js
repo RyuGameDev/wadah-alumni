@@ -1,0 +1,239 @@
+const fs = require('fs');
+const path = require('path');
+const mongoose = require('mongoose');
+const { getIsMongoConnected } = require('./db');
+const { getInitialData } = require('./initialSeed');
+
+// Model Mongoose
+const UserModel = require('../models/User');
+const TracerStudyModel = require('../models/TracerStudy');
+const NewsModel = require('../models/News');
+const DonationModel = require('../models/Donation');
+const CareerModel = require('../models/Career');
+const ForumModel = require('../models/Forum');
+const GalleryModel = require('../models/Gallery');
+
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const LOCAL_DB_FILE = path.join(DATA_DIR, 'local_db.json');
+
+// Memory cache untuk fallback local
+let localDB = null;
+
+function ensureDataDir() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+}
+
+function loadLocalDB() {
+  ensureDataDir();
+  if (fs.existsSync(LOCAL_DB_FILE)) {
+    try {
+      const content = fs.readFileSync(LOCAL_DB_FILE, 'utf-8');
+      localDB = JSON.parse(content);
+      return;
+    } catch (e) {
+      console.error('Gagal membaca local_db.json, mereset data:', e.message);
+    }
+  }
+
+  // Jika belum ada, inisialisasi dengan initial seed
+  localDB = getInitialData();
+  saveLocalDB();
+}
+
+function saveLocalDB() {
+  ensureDataDir();
+  try {
+    fs.writeFileSync(LOCAL_DB_FILE, JSON.stringify(localDB, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Gagal menyimpan local_db.json:', e.message);
+  }
+}
+
+function generateId() {
+  return new mongoose.Types.ObjectId().toString();
+}
+
+// Inisialisasi data di awal server start
+async function initStore() {
+  loadLocalDB();
+
+  // Jika MongoDB terhubung dan koleksi masih kosong, lakukan auto-seeding ke MongoDB
+  if (getIsMongoConnected()) {
+    try {
+      const userCount = await UserModel.countDocuments();
+      if (userCount === 0) {
+        console.log('🌱 Melakukan auto-seeding data awal SMA PGRI 2 Jombang ke MongoDB...');
+        const initial = getInitialData();
+        await UserModel.insertMany(initial.users);
+        await TracerStudyModel.insertMany(initial.tracerStudies);
+        await NewsModel.insertMany(initial.news);
+        await DonationModel.insertMany(initial.donations);
+        await CareerModel.insertMany(initial.careers);
+        await ForumModel.insertMany(initial.forums);
+        await GalleryModel.insertMany(initial.gallery);
+        console.log('✅ Seeding MongoDB berhasil.');
+      }
+    } catch (err) {
+      console.error('Error saat seeding MongoDB:', err.message);
+    }
+  }
+}
+
+// Universal Repository Generator untuk abstraksi Mongoose vs Local Fallback
+function createRepo(collectionName, MongooseModel) {
+  return {
+    async find(filter = {}, sort = { createdAt: -1 }) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.find(filter).sort(sort).lean();
+      }
+
+      let items = [...(localDB[collectionName] || [])];
+
+      // Filter sederhana
+      items = items.filter(item => {
+        for (const [key, val] of Object.entries(filter)) {
+          if (val === undefined || val === null || val === '') continue;
+          if (key === '$or' && Array.isArray(val)) {
+            const orMatch = val.some(condition => {
+              for (const [orK, orV] of Object.entries(condition)) {
+                if (orV instanceof RegExp) {
+                  return orV.test(item[orK] || '');
+                }
+                return item[orK] === orV;
+              }
+              return false;
+            });
+            if (!orMatch) return false;
+            continue;
+          }
+
+          if (val instanceof RegExp) {
+            if (!val.test(item[key] || '')) return false;
+          } else if (typeof val === 'object') {
+            if (val.$regex) {
+              const regex = new RegExp(val.$regex, val.$options || '');
+              if (!regex.test(item[key] || '')) return false;
+            }
+          } else {
+            if (item[key] != val) return false;
+          }
+        }
+        return true;
+      });
+
+      // Sorting
+      if (sort) {
+        const [sortKey, sortOrder] = Object.entries(sort)[0] || ['createdAt', -1];
+        items.sort((a, b) => {
+          const valA = a[sortKey] || 0;
+          const valB = b[sortKey] || 0;
+          return sortOrder === -1 ? (valB > valA ? 1 : -1) : (valA > valB ? 1 : -1);
+        });
+      }
+
+      return items;
+    },
+
+    async findById(id) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.findById(id).lean();
+      }
+      return (localDB[collectionName] || []).find(item => item._id.toString() === id.toString()) || null;
+    },
+
+    async findOne(filter = {}) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.findOne(filter).lean();
+      }
+      const all = await this.find(filter);
+      return all[0] || null;
+    },
+
+    async create(data) {
+      if (getIsMongoConnected()) {
+        const doc = await MongooseModel.create(data);
+        return doc.toObject();
+      }
+      const newItem = {
+        _id: data._id || generateId(),
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      localDB[collectionName].unshift(newItem);
+      saveLocalDB();
+      return newItem;
+    },
+
+    async findByIdAndUpdate(id, updateData, options = {}) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.findByIdAndUpdate(id, updateData, { new: true, ...options }).lean();
+      }
+
+      const list = localDB[collectionName] || [];
+      const index = list.findIndex(item => item._id.toString() === id.toString());
+      if (index === -1) return null;
+
+      // Tangani operator $inc, $push, dll jika ada
+      const current = list[index];
+      let updated = { ...current };
+
+      if (updateData.$inc) {
+        for (const [k, v] of Object.entries(updateData.$inc)) {
+          updated[k] = (updated[k] || 0) + v;
+        }
+        delete updateData.$inc;
+      }
+
+      if (updateData.$push) {
+        for (const [k, v] of Object.entries(updateData.$push)) {
+          updated[k] = [...(updated[k] || []), v];
+        }
+        delete updateData.$push;
+      }
+
+      updated = {
+        ...updated,
+        ...updateData,
+        updatedAt: new Date(),
+      };
+
+      list[index] = updated;
+      saveLocalDB();
+      return updated;
+    },
+
+    async findByIdAndDelete(id) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.findByIdAndDelete(id).lean();
+      }
+      const list = localDB[collectionName] || [];
+      const index = list.findIndex(item => item._id.toString() === id.toString());
+      if (index === -1) return null;
+      const [removed] = list.splice(index, 1);
+      saveLocalDB();
+      return removed;
+    },
+
+    async countDocuments(filter = {}) {
+      if (getIsMongoConnected()) {
+        return await MongooseModel.countDocuments(filter);
+      }
+      const results = await this.find(filter);
+      return results.length;
+    },
+  };
+}
+
+module.exports = {
+  initStore,
+  users: createRepo('users', UserModel),
+  tracerStudies: createRepo('tracerStudies', TracerStudyModel),
+  news: createRepo('news', NewsModel),
+  donations: createRepo('donations', DonationModel),
+  careers: createRepo('careers', CareerModel),
+  forums: createRepo('forums', ForumModel),
+  gallery: createRepo('gallery', GalleryModel),
+};
