@@ -1000,10 +1000,15 @@ const Router = {
       <div class="container section">
         <div class="section-header">
           <div>
-            <span class="section-eyebrow">PROGRAM KEPEDULIAN ALAMATER</span>
+            <span class="section-eyebrow">PROGRAM KEPEDULIAN ALMAMATER</span>
             <h2 class="section-title">Wadah Donasi & Kontribusi <span>Alumni</span></h2>
             <p class="section-desc">Satu langkah kecil kepedulian Anda menghadirkan masa depan yang jauh lebih cerah bagi generasi penerus SMA PGRI 2 Jombang.</p>
           </div>
+          ${App.state.user?.role === 'admin' ? `
+            <button class="btn btn-navy btn-sm" onclick="Router.openCreateDonationModal()">
+              <i class="fas fa-plus-circle"></i> Tambah Program Donasi (Admin)
+            </button>
+          ` : ''}
         </div>
 
         <div class="cards-grid">
@@ -1042,6 +1047,11 @@ const Router = {
                     <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="Router.openDonationModal('${prog._id}')">
                       <i class="fas fa-hand-holding-usd"></i> Kirim Donasi Sekarang
                     </button>
+                    ${App.state.user?.role === 'admin' ? `
+                      <button class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--danger-primary); margin-top: 8px; width: 100%;" onclick="Router.deleteDonationProgram('${prog._id}')">
+                        <i class="fas fa-trash-alt"></i> Hapus Program (Admin)
+                      </button>
+                    ` : ''}
                   </div>
                 </div>
               </div>
@@ -1050,6 +1060,112 @@ const Router = {
         </div>
       </div>
     `;
+  },
+
+  openCreateDonationModal() {
+    App.openModal(`
+      <div class="modal-header">
+        <h3 class="modal-title">Buat Program Donasi Baru (Admin)</h3>
+        <button type="button" class="modal-close-btn" onclick="App.closeModal()">&times;</button>
+      </div>
+      <form onsubmit="Router.handleCreateDonationSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 70vh; overflow-y: auto;">
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama / Judul Program Donasi *</label>
+            <input type="text" name="judul" class="form-control" required placeholder="Contoh: Beasiswa Pendidikan Adik Kelas Berprestasi">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Target Nominal (Rp) *</label>
+              <input type="number" name="target_nominal" class="form-control" min="100000" step="50000" required placeholder="Contoh: 25000000">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Batas Waktu (Opsional)</label>
+              <input type="date" name="batas_waktu" class="form-control">
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Foto Banner Program (Maks 10MB)</label>
+            <input type="file" id="donation-cover-input" class="form-control" accept="image/*">
+          </div>
+          <div style="background: var(--navy-soft); padding: 12px; border-radius: var(--radius-sm);">
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Info Rekening Tujuan Transfer</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px;">
+              <input type="text" name="bank" class="form-control form-control-sm" value="Bank Jatim / BSI" placeholder="Nama Bank" required>
+              <input type="text" name="nomor_rekening" class="form-control form-control-sm" value="011-2053-9726" placeholder="Nomor Rekening" required>
+            </div>
+            <input type="text" name="atas_nama" class="form-control form-control-sm" value="Ikatan Alumni SMA PGRI 2 Jombang" placeholder="Atas Nama Rekening" required>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Deskripsi Program & Tujuan Penggunaan *</label>
+            <textarea name="deskripsi" class="form-control" rows="4" required placeholder="Jelaskan tujuan penggalangan dana ini untuk almamater..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="App.closeModal()">Batal</button>
+          <button type="submit" class="btn btn-navy btn-sm">Buka Program Donasi</button>
+        </div>
+      </form>
+    `);
+  },
+
+  async handleCreateDonationSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fileInput = document.getElementById('donation-cover-input');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Menyimpan program...';
+
+      let coverUrl = '';
+      let telegramFileId = '';
+
+      if (fileInput && fileInput.files.length > 0) {
+        submitBtn.innerText = 'Mengunggah banner...';
+        const uploadResult = await App.uploadFile(fileInput.files[0]);
+        coverUrl = uploadResult.url;
+        telegramFileId = uploadResult.fileId || '';
+      }
+
+      await App.apiRequest('/api/donations', {
+        method: 'POST',
+        body: JSON.stringify({
+          judul: form.judul.value,
+          deskripsi: form.deskripsi.value,
+          target_nominal: form.target_nominal.value,
+          batas_waktu: form.batas_waktu.value || undefined,
+          cover_image: coverUrl || undefined,
+          telegram_file_id: telegramFileId || undefined,
+          rekening_tujuan: {
+            bank: form.bank.value,
+            nomor_rekening: form.nomor_rekening.value,
+            atas_nama: form.atas_nama.value,
+          },
+        }),
+      });
+
+      App.closeModal();
+      App.showToast('Program donasi berhasil dibuat dan dipublikasikan!', 'success');
+      this.handleRoute();
+    } catch (err) {
+      App.showToast(err.message, 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Buka Program Donasi';
+    }
+  },
+
+  async deleteDonationProgram(id) {
+    if (!confirm('Apakah Anda yakin ingin menghapus program donasi ini?')) return;
+    try {
+      await App.apiRequest(`/api/donations/${id}`, { method: 'DELETE' });
+      App.showToast('Program donasi berhasil dihapus.', 'success');
+      this.handleRoute();
+    } catch (err) {
+      App.showToast(err.message, 'error');
+    }
   },
 
   openDonationModal(id) {
