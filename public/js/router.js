@@ -7,6 +7,7 @@
 
 const Router = {
   routes: {},
+  isInitialLoad: true,
 
   init() {
     this.handleRoute();
@@ -64,8 +65,15 @@ const Router = {
     const mainContainer = document.getElementById('main-content');
     if (!mainContainer) return;
 
-    // Tampilkan skeleton loader ringan
-    mainContainer.innerHTML = `<div style="text-align: center; padding: 80px 20px;"><div style="display: inline-block; width: 40px; height: 40px; border: 4px solid var(--navy-soft); border-top-color: var(--gold-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div><p style="margin-top: 14px; font-weight: 600; color: var(--navy-primary);">Memuat portal alumni...</p></div><style>@keyframes spin { to { transform: rotate(360deg); } }</style>`;
+    // Mulai progress bar tipis ala YouTube di paling atas
+    if (typeof App !== 'undefined' && typeof App.startProgressBar === 'function') {
+      App.startProgressBar();
+    }
+
+    // Tampilkan skeleton loader teks hanya saat web pertama kali dimuat (1x saja)
+    if (this.isInitialLoad) {
+      mainContainer.innerHTML = `<div style="text-align: center; padding: 100px 20px;"><div style="display: inline-block; width: 44px; height: 44px; border: 4px solid var(--navy-soft); border-top-color: var(--gold-primary); border-radius: 50%; animation: spin 0.8s linear infinite;"></div><p style="margin-top: 16px; font-weight: 700; color: var(--navy-primary); font-size: 1.05rem; letter-spacing: -0.2px;">Memuat portal alumni SMA PGRI 2 Jombang...</p></div><style>@keyframes spin { to { transform: rotate(360deg); } }</style>`;
+    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -101,6 +109,13 @@ const Router = {
         default:
           await this.renderHome(mainContainer);
       }
+
+      // Tandai initial load selesai & pasang transisi halaman mulus
+      this.isInitialLoad = false;
+      mainContainer.classList.remove('page-transition');
+      void mainContainer.offsetWidth; // paksa reflow browser
+      mainContainer.classList.add('page-transition');
+
     } catch (err) {
       mainContainer.innerHTML = `
         <div class="container section" style="text-align: center;">
@@ -109,6 +124,10 @@ const Router = {
           <button class="btn btn-navy btn-sm" onclick="Router.navigate('home')">Kembali ke Beranda</button>
         </div>
       `;
+    } finally {
+      if (typeof App !== 'undefined' && typeof App.finishProgressBar === 'function') {
+        App.finishProgressBar();
+      }
     }
   },
 

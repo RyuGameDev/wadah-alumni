@@ -70,8 +70,73 @@ const App = {
     }
   },
 
-  // Helper request API dengan token otomatis & error handling aman
-  async apiRequest(url, options = {}) {
+  // In-Memory API Cache untuk Navigasi Instan (0 detik)
+  apiCache: new Map(),
+
+  clearCache(pattern = null) {
+    if (!pattern) {
+      this.apiCache.clear();
+      return;
+    }
+    for (const key of this.apiCache.keys()) {
+      if (key.includes(pattern)) {
+        this.apiCache.delete(key);
+      }
+    }
+  },
+
+  // Top Progress Bar ala YouTube / GitHub (Halus & Modern)
+  startProgressBar() {
+    let bar = document.getElementById('top-progress-bar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'top-progress-bar';
+      document.body.prepend(bar);
+    }
+    bar.style.opacity = '1';
+    bar.style.width = '30%';
+
+    clearTimeout(this._progTimer1);
+    clearTimeout(this._progTimer2);
+    this._progTimer1 = setTimeout(() => {
+      if (bar) bar.style.width = '70%';
+    }, 120);
+    this._progTimer2 = setTimeout(() => {
+      if (bar) bar.style.width = '88%';
+    }, 300);
+  },
+
+  finishProgressBar() {
+    clearTimeout(this._progTimer1);
+    clearTimeout(this._progTimer2);
+    const bar = document.getElementById('top-progress-bar');
+    if (bar) {
+      bar.style.width = '100%';
+      setTimeout(() => {
+        bar.style.opacity = '0';
+        setTimeout(() => {
+          bar.style.width = '0%';
+        }, 280);
+      }, 180);
+    }
+  },
+
+  // Helper request API dengan token otomatis, error handling aman, dan in-memory cache
+  async apiRequest(url, options = {}, bypassCache = false) {
+    const method = (options.method || 'GET').toUpperCase();
+
+    // Jika mutasi data (POST, PUT, DELETE), reset cache agar data selalu terbarukan
+    if (method !== 'GET') {
+      this.clearCache();
+    } else if (!bypassCache && !options.headers) {
+      // Periksa cache memori (valid 90 detik)
+      const cached = this.apiCache.get(url);
+      const now = Date.now();
+      if (cached && (now - cached.timestamp < 90000)) {
+        return JSON.parse(JSON.stringify(cached.data));
+      }
+    }
+
     const headers = {
       'Content-Type': 'application/json',
       ...(options.headers || {}),
@@ -109,6 +174,12 @@ const App = {
       if (!response.ok) {
         throw new Error(data.message || 'Terjadi kesalahan saat memproses permintaan.');
       }
+
+      // Simpan respons GET publik ke memori
+      if (method === 'GET' && !this.state.token) {
+        this.apiCache.set(url, { data, timestamp: Date.now() });
+      }
+
       return data;
     } catch (err) {
       throw err;

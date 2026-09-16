@@ -2600,3 +2600,36 @@ button, input, select, textarea {
   }
 }
 
+/* ============================================================
+   TOP PROGRESS BAR & SEAMLESS PAGE TRANSITION
+   ============================================================ */
+#top-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #fef08a);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.8), 0 0 4px rgba(245, 158, 11, 0.9);
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
+.page-transition {
+  animation: seamlessFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes seamlessFadeIn {
+  from {
+    opacity: 0.85;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
