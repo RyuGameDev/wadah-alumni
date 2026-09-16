@@ -12,6 +12,7 @@ const DonationModel = require('../models/Donation');
 const CareerModel = require('../models/Career');
 const ForumModel = require('../models/Forum');
 const GalleryModel = require('../models/Gallery');
+const BannerModel = require('../models/Banner');
 
 async function seedMongoCredentials() {
   console.log('🚀 Memulai proses seeding data & demo credentials ke MongoDB...');
@@ -93,6 +94,13 @@ async function seedMongoCredentials() {
       await ForumModel.insertMany(initial.forums);
       await GalleryModel.insertMany(initial.gallery);
       console.log('✅ Semua koleksi awal MongoDB berhasil diisi.');
+    }
+
+    const bannerCount = await BannerModel.countDocuments();
+    if (bannerCount === 0 && initial.banners) {
+      console.log('🌱 Menyemai 3 slide banner hero awal ke MongoDB...');
+      await BannerModel.insertMany(initial.banners);
+      console.log('✅ Slide banner hero awal berhasil di-seed.');
     }
 
     console.log('\n🎉 Selesai! Semua kredensial demo siap digunakan di MongoDB.');

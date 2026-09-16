@@ -12,6 +12,7 @@ const DonationModel = require('../models/Donation');
 const CareerModel = require('../models/Career');
 const ForumModel = require('../models/Forum');
 const GalleryModel = require('../models/Gallery');
+const BannerModel = require('../models/Banner');
 
 const DATA_DIR = process.env.VERCEL ? path.join('/tmp', 'data') : path.join(__dirname, '..', 'data');
 const LOCAL_DB_FILE = path.join(DATA_DIR, 'local_db.json');
@@ -76,6 +77,7 @@ async function initStore() {
         await CareerModel.insertMany(initial.careers);
         await ForumModel.insertMany(initial.forums);
         await GalleryModel.insertMany(initial.gallery);
+        if (initial.banners) await BannerModel.insertMany(initial.banners);
         console.log('✅ Seeding MongoDB awal berhasil.');
       } else {
         // Pastikan kredensial admin demo selalu ada
@@ -93,9 +95,16 @@ async function initStore() {
           if (alumniUser) await UserModel.create(alumniUser);
           console.log('✅ Kredensial alumni demo dibuat di MongoDB.');
         }
+
+        // Pastikan banner awal ada di MongoDB jika koleksi banner masih kosong
+        const bannerCount = await BannerModel.countDocuments();
+        if (bannerCount === 0 && initial.banners) {
+          await BannerModel.insertMany(initial.banners);
+          console.log('✅ Default Hero Banners berhasil di-seed ke MongoDB.');
+        }
       }
     } catch (err) {
-      console.error('Error saat seeding kredensial MongoDB:', err.message);
+      console.error('Error saat seeding kredensial/banner MongoDB:', err.message);
     }
   }
 }
@@ -255,4 +264,5 @@ module.exports = {
   careers: createRepo('careers', CareerModel),
   forums: createRepo('forums', ForumModel),
   gallery: createRepo('gallery', GalleryModel),
+  banners: createRepo('banners', BannerModel),
 };

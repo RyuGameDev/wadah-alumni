@@ -116,18 +116,36 @@ const Router = {
   // 1. BERANDA (HOME VIEW)
   // ============================================================
   async renderHome(container) {
-    // Ambil data statistik, berita terbaru, donasi, galeri secara paralel
-    const [statsRes, newsRes, donationRes, galleryRes] = await Promise.all([
+    // Ambil data statistik, berita terbaru, donasi, galeri, dan banner hero secara paralel
+    const [statsRes, newsRes, donationRes, galleryRes, bannerRes] = await Promise.all([
       App.apiRequest('/api/alumni/stats/summary'),
       App.apiRequest('/api/news?limit=3'),
       App.apiRequest('/api/donations'),
       App.apiRequest('/api/gallery'),
+      App.apiRequest('/api/banners'),
     ]);
 
     const stats = statsRes.data;
     const latestNews = newsRes.data || [];
     const donationList = (donationRes.data || []).slice(0, 3);
     const galleryList = (galleryRes.data || []).slice(0, 4);
+    const bannerList = (bannerRes && bannerRes.data && bannerRes.data.length > 0) ? bannerRes.data : [
+      {
+        judul: 'Pelepasan Wisuda Purnawiyata',
+        subjudul: 'Melahirkan Generasi Juara yang Berakhlak Mulia',
+        gambar_url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80',
+      },
+      {
+        judul: 'Temu Alumni & Sharing Session',
+        subjudul: 'Sinergi Kakak Tingkat Menuntun Adik Kelas Menuju PTN',
+        gambar_url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80',
+      },
+      {
+        judul: 'Prestasi Nasional & Internasional',
+        subjudul: 'SMA PGRI 2 Jombang: Sekolahnya Para Juara',
+        gambar_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80',
+      },
+    ];
 
     container.innerHTML = `
       <!-- HERO SECTION -->
@@ -183,31 +201,19 @@ const Router = {
 
             <div class="hero-visual">
               <div class="carousel-card" id="home-hero-carousel">
-                <div class="carousel-slide active">
-                  <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80" alt="Kegiatan Sekolah">
-                  <div class="carousel-overlay">
-                    <div class="carousel-caption-title">Pelepasan Wisuda Purnawiyata</div>
-                    <div class="carousel-caption-sub">Melahirkan Generasi Juara yang Berakhlak Mulia</div>
+                ${bannerList.map((banner, idx) => `
+                  <div class="carousel-slide ${idx === 0 ? 'active' : ''}">
+                    <img src="${banner.gambar_url}" alt="${banner.judul}">
+                    <div class="carousel-overlay">
+                      <div class="carousel-caption-title">${banner.judul}</div>
+                      ${banner.subjudul ? `<div class="carousel-caption-sub">${banner.subjudul}</div>` : ''}
+                    </div>
                   </div>
-                </div>
-                <div class="carousel-slide">
-                  <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80" alt="Alumni Gathering">
-                  <div class="carousel-overlay">
-                    <div class="carousel-caption-title">Temu Alumni & Sharing Session</div>
-                    <div class="carousel-caption-sub">Sinergi Kakak Tingkat Menuntun Adik Kelas Menuju PTN</div>
-                  </div>
-                </div>
-                <div class="carousel-slide">
-                  <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80" alt="Prestasi">
-                  <div class="carousel-overlay">
-                    <div class="carousel-caption-title">Prestasi Nasional & Internasional</div>
-                    <div class="carousel-caption-sub">SMA PGRI 2 Jombang: Sekolahnya Para Juara</div>
-                  </div>
-                </div>
+                `).join('')}
                 <div class="carousel-dots" id="hero-carousel-dots">
-                  <span class="carousel-dot active" onclick="Router.setHeroSlide(0)"></span>
-                  <span class="carousel-dot" onclick="Router.setHeroSlide(1)"></span>
-                  <span class="carousel-dot" onclick="Router.setHeroSlide(2)"></span>
+                  ${bannerList.map((_, idx) => `
+                    <span class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="Router.setHeroSlide(${idx})"></span>
+                  `).join('')}
                 </div>
               </div>
 
@@ -586,7 +592,9 @@ const Router = {
   startHeroCarousel() {
     if (this.heroSlideTimer) clearInterval(this.heroSlideTimer);
     this.heroSlideTimer = setInterval(() => {
-      this.heroSlideIndex = (this.heroSlideIndex + 1) % 3;
+      const slides = document.querySelectorAll('.carousel-slide');
+      if (!slides || slides.length <= 1) return;
+      this.heroSlideIndex = (this.heroSlideIndex + 1) % slides.length;
       this.setHeroSlide(this.heroSlideIndex);
     }, 5000);
   },
@@ -2099,13 +2107,15 @@ const Router = {
       return;
     }
 
-    const [dashRes, alumniRes] = await Promise.all([
+    const [dashRes, alumniRes, bannerRes] = await Promise.all([
       App.apiRequest('/api/admin/dashboard'),
       App.apiRequest('/api/admin/alumni'),
+      App.apiRequest('/api/banners'),
     ]);
 
     const stats = dashRes.data;
     const allAlumni = alumniRes.data || [];
+    const allBanners = (bannerRes && bannerRes.data) || [];
 
     container.innerHTML = `
       <div class="container section">
@@ -2150,6 +2160,49 @@ const Router = {
             <div>
               <div class="stat-num">${stats.total_berita}</div>
               <div class="stat-label">Berita / Artikel</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Banners Management Card -->
+        <div style="background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 32px;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--navy-primary); margin-bottom: 4px;">
+                <i class="fas fa-images"></i> Kelola Slide Banner Landing Page (Hero Carousel)
+              </h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
+                Ganti atau tambahkan foto dan tulisan slide di bagian paling atas beranda portal (${allBanners.length} slide aktif).
+              </p>
+            </div>
+            <button class="btn btn-navy btn-sm" onclick="Router.openCreateBannerModal()">
+              <i class="fas fa-plus-circle"></i> Tambah Slide Banner
+            </button>
+          </div>
+
+          <div style="padding: 20px 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+              ${allBanners.map((b, idx) => `
+                <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-main); display: flex; flex-direction: column;">
+                  <div style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
+                    <img src="${b.gambar_url}" alt="${b.judul}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span style="position: absolute; top: 8px; left: 8px; background: rgba(7,34,66,0.85); color: #fff; padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 700;">
+                      Slide #${idx + 1}
+                    </span>
+                  </div>
+                  <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                      <strong style="display: block; font-size: 0.85rem; color: var(--navy-primary); margin-bottom: 4px;">${b.judul}</strong>
+                      <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; margin: 0 0 12px 0;">${b.subjudul || '-'}</p>
+                    </div>
+                    <div style="border-top: 1px solid var(--border-color); padding-top: 10px;">
+                      <button class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--danger-primary); width: 100%; font-size: 0.75rem;" onclick="Router.deleteBannerSlide('${b._id}')">
+                        <i class="fas fa-trash-alt"></i> Hapus Slide
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
             </div>
           </div>
         </div>
@@ -2223,6 +2276,91 @@ const Router = {
         </div>
       </div>
     `;
+  },
+
+  openCreateBannerModal() {
+    App.openModal(`
+      <div class="modal-header">
+        <h3 class="modal-title">Tambah Slide Banner Hero (Landing Page)</h3>
+        <button type="button" class="modal-close-btn" onclick="App.closeModal()">&times;</button>
+      </div>
+      <form onsubmit="Router.handleCreateBannerSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 70vh; overflow-y: auto;">
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Judul Slide Banner *</label>
+            <input type="text" name="judul" class="form-control" required placeholder="Contoh: Gedung Utama & Suasana Belajar Grida Joe">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Subjudul / Keterangan Slide</label>
+            <input type="text" name="subjudul" class="form-control" placeholder="Contoh: Mencetak Lulusan Juara Berprestasi dan Berakhlak Mulia">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Foto Slide (Unggah Foto Asli Sekolah - Maks 10MB) *</label>
+            <input type="file" id="banner-image-input" class="form-control" accept="image/*" required>
+            <small style="color: var(--text-muted); font-size: 0.72rem;">Direkomendasikan foto landscape tajam (rasio 16:9 atau 4:3).</small>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nomor Urutan Tampil (Opsional)</label>
+            <input type="number" name="urutan" class="form-control" min="1" placeholder="1, 2, 3, dst.">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-sm" onclick="App.closeModal()">Batal</button>
+          <button type="submit" class="btn btn-navy btn-sm">Simpan Slide Banner</button>
+        </div>
+      </form>
+    `);
+  },
+
+  async handleCreateBannerSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fileInput = document.getElementById('banner-image-input');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    if (!fileInput || fileInput.files.length === 0) {
+      App.showToast('Mohon pilih file foto banner terlebih dahulu.', 'error');
+      return;
+    }
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Mengunggah foto banner...';
+
+      const uploadResult = await App.uploadFile(fileInput.files[0]);
+      submitBtn.innerText = 'Menyimpan banner...';
+
+      await App.apiRequest('/api/banners', {
+        method: 'POST',
+        body: JSON.stringify({
+          judul: form.judul.value,
+          subjudul: form.subjudul.value,
+          gambar_url: uploadResult.url,
+          telegram_file_id: uploadResult.fileId || '',
+          urutan: form.urutan.value ? parseInt(form.urutan.value, 10) : undefined,
+        }),
+      });
+
+      App.closeModal();
+      App.showToast('Slide banner berhasil ditambahkan ke landing page!', 'success');
+      this.handleRoute();
+    } catch (err) {
+      App.showToast(err.message, 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Simpan Slide Banner';
+    }
+  },
+
+  async deleteBannerSlide(id) {
+    if (!confirm('Apakah Anda yakin ingin menghapus slide banner ini dari landing page?')) return;
+    try {
+      await App.apiRequest(`/api/banners/${id}`, { method: 'DELETE' });
+      App.showToast('Slide banner berhasil dihapus.', 'success');
+      this.handleRoute();
+    } catch (err) {
+      App.showToast(err.message, 'error');
+    }
   },
 
   async setAlumniStatus(id, status) {

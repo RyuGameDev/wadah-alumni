@@ -94,6 +94,7 @@ const donationRoutes = require('./routes/donation');
 const careerRoutes = require('./routes/career');
 const forumRoutes = require('./routes/forum');
 const galleryRoutes = require('./routes/gallery');
+const bannerRoutes = require('./routes/banners');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
 
@@ -117,6 +118,9 @@ app.use('/forum', forumRoutes);
 
 app.use('/api/gallery', galleryRoutes);
 app.use('/gallery', galleryRoutes);
+
+app.use('/api/banners', bannerRoutes);
+app.use('/banners', bannerRoutes);
 
 app.use('/api/upload', uploadRoutes);
 app.use('/upload', uploadRoutes);

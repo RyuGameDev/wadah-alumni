@@ -544,6 +544,36 @@ function getInitialData() {
     }
   ];
 
+  const banners = [
+    {
+      _id: '6608a0000000000000000001',
+      judul: 'Pelepasan Wisuda Purnawiyata',
+      subjudul: 'Melahirkan Generasi Juara yang Berakhlak Mulia',
+      gambar_url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80',
+      urutan: 1,
+      is_active: true,
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+    },
+    {
+      _id: '6608a0000000000000000002',
+      judul: 'Temu Alumni & Sharing Session',
+      subjudul: 'Sinergi Kakak Tingkat Menuntun Adik Kelas Menuju PTN',
+      gambar_url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80',
+      urutan: 2,
+      is_active: true,
+      createdAt: new Date('2024-01-02T00:00:00Z'),
+    },
+    {
+      _id: '6608a0000000000000000003',
+      judul: 'Prestasi Nasional & Internasional',
+      subjudul: 'SMA PGRI 2 Jombang: Sekolahnya Para Juara',
+      gambar_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80',
+      urutan: 3,
+      is_active: true,
+      createdAt: new Date('2024-01-03T00:00:00Z'),
+    },
+  ];
+
   return {
     users,
     tracerStudies,
@@ -552,6 +582,7 @@ function getInitialData() {
     careers,
     forums,
     gallery,
+    banners,
   };
 }
 
