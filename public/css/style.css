@@ -2366,3 +2366,237 @@ button, input, select, textarea {
     justify-content: center;
   }
 }
+
+/* ============================================================
+   RESPONSIVE 4-COLUMN GRID (GALLERY & ALUMNI DIRECTORY)
+   ============================================================ */
+.cards-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 1400px) {
+  .cards-grid-4 {
+    gap: 28px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cards-grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cards-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cards-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cards-grid-4 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Gallery Specific Card Styling */
+.gallery-card-item {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(10, 37, 73, 0.2);
+}
+
+.gallery-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--navy-dark);
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.gallery-card-item:hover .gallery-thumb img {
+  transform: scale(1.08);
+}
+
+.gallery-info {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffffff;
+  flex: 1;
+}
+
+.gallery-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy-primary);
+  line-height: 1.35;
+}
+
+.gallery-date {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .gallery-info {
+    padding: 10px 10px;
+  }
+  .gallery-title {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  .gallery-card-item .card-category-badge {
+    top: 8px;
+    left: 8px;
+    font-size: 0.6rem;
+    padding: 2px 7px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE CTA BANNER (MARI BERSINERGI)
+   ============================================================ */
+.cta-banner-card {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-primary) 60%, #0d4277 100%);
+  padding: 48px 40px;
+  border-radius: var(--radius-lg);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner-content {
+  max-width: 650px;
+  text-align: left;
+}
+
+.cta-banner-content .ticker-badge {
+  margin-bottom: 12px;
+  display: inline-flex;
+}
+
+.cta-banner-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.cta-banner-desc {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.cta-banner-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cta-banner-btn {
+  padding: 14px 28px;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .cta-banner-card {
+    padding: 32px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 20px;
+  }
+
+  .cta-banner-title {
+    font-size: 1.45rem;
+    line-height: 1.3;
+  }
+
+  .cta-banner-desc {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .cta-banner-action {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cta-banner-btn {
+    align-self: flex-start;
+    margin-left: 0;
+    padding: 13px 24px;
+    font-size: 0.9375rem;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+  }
+}
+
+/* ============================================================
+   DASHBOARD RESPONSIVE GRID
+   ============================================================ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+

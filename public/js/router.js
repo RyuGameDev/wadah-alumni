@@ -529,16 +529,16 @@ const Router = {
             </div>
           </div>
 
-          <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="cards-grid-4">
             ${galleryList.map(gal => `
-              <div class="card-item" style="cursor: pointer;" onclick="Router.openLightbox('${gal.gambar_url}', '${gal.judul}', '${gal.kategori}')">
-                <div class="card-thumb" style="aspect-ratio: 1 / 1;">
-                  <img src="${gal.gambar_url}" alt="${gal.judul}">
+              <div class="gallery-card-item" onclick="Router.openLightbox('${gal.gambar_url}', '${gal.judul}', '${gal.kategori}')">
+                <div class="gallery-thumb">
+                  <img src="${gal.gambar_url}" alt="${gal.judul}" loading="lazy">
                   <span class="card-category-badge">${gal.kategori}</span>
                 </div>
-                <div style="padding: 14px;">
-                  <strong style="display: block; font-size: 0.85rem; color: var(--navy-primary);">${gal.judul}</strong>
-                  <small style="color: var(--text-muted); font-size: 0.72rem;">${gal.tanggal_kegiatan || 'Dokumentasi'}</small>
+                <div class="gallery-info">
+                  <strong class="gallery-title">${gal.judul}</strong>
+                  <small class="gallery-date"><i class="far fa-calendar-alt"></i> ${gal.tanggal_kegiatan || 'Dokumentasi'}</small>
                 </div>
               </div>
             `).join('')}
@@ -546,26 +546,26 @@ const Router = {
         </div>
       </section>
 
-      <!-- CTA BANNER DAFTAR -->
+      <!-- CTA BANNER DAFTAR (RESPONSIVE & LEFT-ALIGNED ON MOBILE) -->
       <section class="section" style="padding-top: 20px;">
         <div class="container">
-          <div style="background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-primary) 60%, #0d4277 100%); padding: 50px 40px; border-radius: var(--radius-lg); color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px; box-shadow: var(--shadow-lg);">
-            <div style="max-width: 650px;">
-              <span class="ticker-badge" style="margin-bottom: 12px; display: inline-block;">MARI BERSINERGI</span>
-              <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-bottom: 10px;">
+          <div class="cta-banner-card">
+            <div class="cta-banner-content">
+              <span class="ticker-badge">MARI BERSINERGI</span>
+              <h2 class="cta-banner-title">
                 Bangga Menjadi Bagian dari Ikatan Alumni SMA PGRI 2 Jombang!
               </h2>
-              <p style="color: rgba(255,255,255,0.78); font-size: 0.95rem; line-height: 1.6;">
+              <p class="cta-banner-desc">
                 Daftarkan akun alumni Anda sekarang, perbarui jejak studi & karir, serta buka pintu peluang kolaborasi tanpa batas bersama ribuan rekan seangkatan.
               </p>
             </div>
-            <div>
+            <div class="cta-banner-action">
               ${!App.state.user ? `
-                <button class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;" onclick="App.openRegisterModal()">
+                <button class="btn btn-primary cta-banner-btn" onclick="App.openRegisterModal()">
                   <i class="fas fa-user-plus"></i> Gabung Alumni Sekarang
                 </button>
               ` : `
-                <a href="#tracer" class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;">
+                <a href="#tracer" class="btn btn-primary cta-banner-btn">
                   <i class="fas fa-clipboard-check"></i> Lengkapi Kuesioner Tracer
                 </a>
               `}
@@ -705,8 +705,8 @@ const Router = {
           </div>
         </div>
 
-        <!-- Alumni Grid -->
-        <div class="cards-grid" id="alumni-grid-container" style="grid-template-columns: repeat(4, 1fr);">
+        <!-- Alumni Grid (Responsive 4 cols to 2/1 cols on mobile) -->
+        <div class="cards-grid-4" id="alumni-grid-container">
           ${this.generateAlumniCardsHtml(alumniList)}
         </div>
       </div>
@@ -1835,7 +1835,7 @@ const Router = {
 
     container.innerHTML = `
       <div class="container section">
-        <div style="display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: flex-start;">
+        <div class="dashboard-grid">
           <!-- Sidebar Profil -->
           <div style="background: #ffffff; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); text-align: center;">
             <img src="${u.foto_profil || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300'}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; border: 3px solid var(--gold-primary);">
