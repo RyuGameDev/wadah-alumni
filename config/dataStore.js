@@ -13,16 +13,18 @@ const CareerModel = require('../models/Career');
 const ForumModel = require('../models/Forum');
 const GalleryModel = require('../models/Gallery');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const DATA_DIR = process.env.VERCEL ? path.join('/tmp', 'data') : path.join(__dirname, '..', 'data');
 const LOCAL_DB_FILE = path.join(DATA_DIR, 'local_db.json');
 
 // Memory cache untuk fallback local
 let localDB = null;
 
 function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (e) {}
 }
 
 function loadLocalDB() {
@@ -47,7 +49,7 @@ function saveLocalDB() {
   try {
     fs.writeFileSync(LOCAL_DB_FILE, JSON.stringify(localDB, null, 2), 'utf-8');
   } catch (e) {
-    console.error('Gagal menyimpan local_db.json:', e.message);
+    // Di lingkungan serverless write file lokal diabaikan jika gagal
   }
 }
 
@@ -55,17 +57,18 @@ function generateId() {
   return new mongoose.Types.ObjectId().toString();
 }
 
-// Inisialisasi data di awal server start
+// Inisialisasi data & auto-seed kredensial demo ke MongoDB
 async function initStore() {
   loadLocalDB();
 
-  // Jika MongoDB terhubung dan koleksi masih kosong, lakukan auto-seeding ke MongoDB
+  // Jika MongoDB terhubung, pastikan kredensial demo & data awal tersedia
   if (getIsMongoConnected()) {
     try {
+      const initial = getInitialData();
       const userCount = await UserModel.countDocuments();
+      
       if (userCount === 0) {
         console.log('🌱 Melakukan auto-seeding data awal SMA PGRI 2 Jombang ke MongoDB...');
-        const initial = getInitialData();
         await UserModel.insertMany(initial.users);
         await TracerStudyModel.insertMany(initial.tracerStudies);
         await NewsModel.insertMany(initial.news);
@@ -73,10 +76,26 @@ async function initStore() {
         await CareerModel.insertMany(initial.careers);
         await ForumModel.insertMany(initial.forums);
         await GalleryModel.insertMany(initial.gallery);
-        console.log('✅ Seeding MongoDB berhasil.');
+        console.log('✅ Seeding MongoDB awal berhasil.');
+      } else {
+        // Pastikan kredensial admin demo selalu ada
+        const adminExists = await UserModel.findOne({ email: 'admin@smapgri2jombang.sch.id' });
+        if (!adminExists) {
+          const adminUser = initial.users.find(u => u.role === 'admin');
+          if (adminUser) await UserModel.create(adminUser);
+          console.log('✅ Kredensial admin demo dibuat di MongoDB.');
+        }
+
+        // Pastikan kredensial alumni demo selalu ada
+        const alumniExists = await UserModel.findOne({ email: 'rizky.pratama@gmail.com' });
+        if (!alumniExists) {
+          const alumniUser = initial.users.find(u => u.email === 'rizky.pratama@gmail.com');
+          if (alumniUser) await UserModel.create(alumniUser);
+          console.log('✅ Kredensial alumni demo dibuat di MongoDB.');
+        }
       }
     } catch (err) {
-      console.error('Error saat seeding MongoDB:', err.message);
+      console.error('Error saat seeding kredensial MongoDB:', err.message);
     }
   }
 }

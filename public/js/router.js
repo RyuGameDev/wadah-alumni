@@ -614,7 +614,7 @@ const Router = {
             </div>
 
             <span class="ticker-badge" style="display: inline-block; margin-bottom: 12px; background: rgba(239, 68, 68, 0.12); color: #b91c1c; border: 1px solid rgba(239, 68, 68, 0.25);">
-              <i class="fas fa-shield-alt"></i> AKSES TERBATAS &amp; RAHASIA
+              <i class="fas fa-shield-alt"></i> AKSES TERBATAS
             </span>
 
             <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--navy-primary); margin-bottom: 12px;">

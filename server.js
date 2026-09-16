@@ -17,6 +17,33 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Inisialisasi Database & Store otomatis (serverless compatible)
+let isInit = false;
+let initPromise = null;
+
+async function ensureStoreReady() {
+  if (!isInit) {
+    if (!initPromise) {
+      initPromise = (async () => {
+        await connectDB();
+        await initStore();
+        isInit = true;
+      })();
+    }
+    await initPromise;
+  }
+}
+
+app.use(async (req, res, next) => {
+  try {
+    await ensureStoreReady();
+    next();
+  } catch (err) {
+    console.error('Inisialisasi store gagal:', err);
+    next();
+  }
+});
+
 // Endpoint Informasi Sekolah Resmi SMA PGRI 2 Jombang
 app.get('/api/school-info', (req, res) => {
   res.json({
@@ -70,7 +97,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server
+// Start Server jika dijalankan langsung (bukan serverless)
 async function startServer() {
   try {
     await connectDB();
@@ -88,4 +115,8 @@ async function startServer() {
   }
 }
 
-startServer();
+if (require.main === module && !process.env.VERCEL) {
+  startServer();
+}
+
+module.exports = app;
