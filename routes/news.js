@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const { news } = require('../config/dataStore');
 const { requireAdmin } = require('../middleware/auth');
 
@@ -54,9 +55,14 @@ router.get('/', async (req, res) => {
 router.get('/:idOrSlug', async (req, res) => {
   try {
     const param = req.params.idOrSlug;
-    let article = await news.findById(param);
-    if (!article) {
-      article = await news.findOne({ slug: param });
+    let article = null;
+
+    // 1. Cari berdasarkan slug terlebih dahulu (paling sering dipakai di router #berita/:slug)
+    article = await news.findOne({ slug: param });
+
+    // 2. Fallback jika param adalah ID MongoDB ObjectId yang valid
+    if (!article && mongoose.Types.ObjectId.isValid(param)) {
+      article = await news.findById(param);
     }
 
     if (!article) {
@@ -66,15 +72,22 @@ router.get('/:idOrSlug', async (req, res) => {
       });
     }
 
-    // Tambahkan jumlah pembaca
-    await news.findByIdAndUpdate(article._id, { $inc: { views: 1 } });
-    article.views = (article.views || 0) + 1;
+    // Tambahkan jumlah pembaca tanpa menggagalkan respon utama jika terjadi kendala
+    try {
+      if (article._id) {
+        await news.findByIdAndUpdate(article._id, { $inc: { views: 1 } });
+        article.views = (article.views || 0) + 1;
+      }
+    } catch (viewErr) {
+      console.warn('Gagal menambah view counter:', viewErr.message);
+    }
 
     res.json({
       success: true,
       data: article,
     });
   } catch (err) {
+    console.error('Error saat memuat berita detail:', err.message);
     res.status(500).json({
       success: false,
       message: 'Gagal memuat artikel berita.',

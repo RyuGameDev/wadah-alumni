@@ -165,10 +165,18 @@ function createRepo(collectionName, MongooseModel) {
     },
 
     async findById(id) {
+      if (!id) return null;
       if (getIsMongoConnected()) {
-        return await MongooseModel.findById(id).lean();
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          return null;
+        }
+        try {
+          return await MongooseModel.findById(id).lean();
+        } catch (e) {
+          return null;
+        }
       }
-      return (localDB[collectionName] || []).find(item => item._id.toString() === id.toString()) || null;
+      return (localDB[collectionName] || []).find(item => item._id && item._id.toString() === id.toString()) || null;
     },
 
     async findOne(filter = {}) {
@@ -196,12 +204,20 @@ function createRepo(collectionName, MongooseModel) {
     },
 
     async findByIdAndUpdate(id, updateData, options = {}) {
+      if (!id) return null;
       if (getIsMongoConnected()) {
-        return await MongooseModel.findByIdAndUpdate(id, updateData, { new: true, ...options }).lean();
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          return null;
+        }
+        try {
+          return await MongooseModel.findByIdAndUpdate(id, updateData, { new: true, ...options }).lean();
+        } catch (e) {
+          return null;
+        }
       }
 
       const list = localDB[collectionName] || [];
-      const index = list.findIndex(item => item._id.toString() === id.toString());
+      const index = list.findIndex(item => item._id && item._id.toString() === id.toString());
       if (index === -1) return null;
 
       // Tangani operator $inc, $push, dll jika ada
@@ -234,11 +250,19 @@ function createRepo(collectionName, MongooseModel) {
     },
 
     async findByIdAndDelete(id) {
+      if (!id) return null;
       if (getIsMongoConnected()) {
-        return await MongooseModel.findByIdAndDelete(id).lean();
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          return null;
+        }
+        try {
+          return await MongooseModel.findByIdAndDelete(id).lean();
+        } catch (e) {
+          return null;
+        }
       }
       const list = localDB[collectionName] || [];
-      const index = list.findIndex(item => item._id.toString() === id.toString());
+      const index = list.findIndex(item => item._id && item._id.toString() === id.toString());
       if (index === -1) return null;
       const [removed] = list.splice(index, 1);
       saveLocalDB();

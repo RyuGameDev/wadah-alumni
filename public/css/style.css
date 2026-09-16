@@ -447,6 +447,8 @@ button, input, select, textarea {
 /* Dropdown */
 .nav-dropdown {
   position: relative;
+  padding-bottom: 6px;
+  margin-bottom: -6px;
 }
 
 .dropdown-menu {
@@ -463,21 +465,33 @@ button, input, select, textarea {
   flex-direction: column;
   gap: 4px;
   z-index: 100;
-  margin-top: 6px;
+  margin-top: 2px;
+}
+
+/* Invisible bridge so moving cursor down slowly never drops hover */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: transparent;
+  display: block;
 }
 
 .nav-dropdown:hover .dropdown-menu {
   display: flex;
-  animation: dropdownFade 0.2s ease forwards;
+  animation: dropdownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes dropdownFade {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .dropdown-item {
-  padding: 8px 12px;
+  padding: 9px 12px;
   font-size: 0.8125rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
@@ -486,6 +500,13 @@ button, input, select, textarea {
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .dropdown-item:hover {
