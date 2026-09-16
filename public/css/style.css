@@ -2023,19 +2023,53 @@ button, input, select, textarea {
 }
 
 .form-control, .form-select {
-  padding: 9px 14px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   background: #ffffff;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+  font-family: inherit;
   color: var(--text-main);
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: var(--navy-medium);
-  box-shadow: 0 0 0 3px rgba(15, 57, 110, 0.12);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+textarea.form-control {
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+input[type="file"].form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 576px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 /* ============================================================
@@ -2125,8 +2159,25 @@ button, input, select, textarea {
 }
 
 .modal-body {
-  padding: 22px;
+  padding: 24px;
   overflow-y: auto;
+}
+
+.modal-body label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.1px;
+}
+
+.modal-body .form-control,
+.modal-body .form-select,
+.modal-body textarea,
+.modal-body input {
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 @media (max-width: 576px) {

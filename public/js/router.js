@@ -1098,33 +1098,33 @@ const Router = {
       <form onsubmit="Router.handleCreateDonationSubmit(event)">
         <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 70vh; overflow-y: auto;">
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama / Judul Program Donasi *</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Nama / Judul Program Donasi *</label>
             <input type="text" name="judul" class="form-control" required placeholder="Contoh: Beasiswa Pendidikan Adik Kelas Berprestasi">
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2">
             <div>
-              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Target Nominal (Rp) *</label>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Target Nominal (Rp) *</label>
               <input type="number" name="target_nominal" class="form-control" min="100000" step="50000" required placeholder="Contoh: 25000000">
             </div>
             <div>
-              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Batas Waktu (Opsional)</label>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Batas Waktu (Opsional)</label>
               <input type="date" name="batas_waktu" class="form-control">
             </div>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Foto Banner Program (Maks 10MB)</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Foto Banner Program (Maks 10MB)</label>
             <input type="file" id="donation-cover-input" class="form-control" accept="image/*">
           </div>
-          <div style="background: var(--navy-soft); padding: 12px; border-radius: var(--radius-sm);">
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Info Rekening Tujuan Transfer</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px;">
-              <input type="text" name="bank" class="form-control form-control-sm" value="Bank Jatim / BSI" placeholder="Nama Bank" required>
-              <input type="text" name="nomor_rekening" class="form-control form-control-sm" value="011-2053-9726" placeholder="Nomor Rekening" required>
+          <div style="background: var(--navy-soft); padding: 14px; border-radius: var(--radius-md); border: 1px solid rgba(14, 82, 127, 0.15);">
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 8px; color: var(--navy-primary);">Info Rekening Tujuan Transfer</label>
+            <div class="form-grid-2" style="margin-bottom: 8px;">
+              <input type="text" name="bank" class="form-control" value="Bank Jatim / BSI" placeholder="Nama Bank" required>
+              <input type="text" name="nomor_rekening" class="form-control" value="011-2053-9726" placeholder="Nomor Rekening" required>
             </div>
-            <input type="text" name="atas_nama" class="form-control form-control-sm" value="Ikatan Alumni SMA PGRI 2 Jombang" placeholder="Atas Nama Rekening" required>
+            <input type="text" name="atas_nama" class="form-control" value="Ikatan Alumni SMA PGRI 2 Jombang" placeholder="Atas Nama Rekening" required>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Deskripsi Program & Tujuan Penggunaan *</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Deskripsi Program & Tujuan Penggunaan *</label>
             <textarea name="deskripsi" class="form-control" rows="4" required placeholder="Jelaskan tujuan penggalangan dana ini untuk almamater..."></textarea>
           </div>
         </div>
@@ -1209,27 +1209,27 @@ const Router = {
             a.n. Ikatan Alumni SMA PGRI 2 Jombang
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama Donatur *</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Nama Donatur *</label>
             <input type="text" name="nama" class="form-control" value="${App.state.user?.nama_lengkap || ''}" placeholder="Nama Anda atau kosongkan untuk Hamba Allah">
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2">
             <div>
-              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Angkatan / Status</label>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Angkatan / Status</label>
               <input type="text" name="angkatan" class="form-control" value="${App.state.user ? `Alumni ${App.state.user.tahun_lulus}` : ''}" placeholder="Contoh: Alumni 2018">
             </div>
             <div>
-              <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nominal Donasi (Rp) *</label>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Nominal Donasi (Rp) *</label>
               <input type="number" name="nominal" class="form-control" placeholder="Minimal Rp 10.000" min="10000" required>
             </div>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Pesan & Doa Kebaikan</label>
-            <textarea name="pesan_doa" class="form-control" rows="2" placeholder="Tuliskan doa atau pesan untuk almamater dan adik kelas..."></textarea>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Pesan & Doa Kebaikan</label>
+            <textarea name="pesan_doa" class="form-control" rows="3" placeholder="Tuliskan doa atau pesan untuk almamater dan adik kelas tercinta..."></textarea>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Bukti Transfer (Maks. 20MB - Disimpan via Telegram Bot)</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Bukti Transfer (Maks. 20MB - Disimpan via Telegram Bot)</label>
             <input type="file" id="donation-proof-input" class="form-control" accept="image/*,application/pdf">
-            <small style="color: var(--text-muted); font-size: 0.72rem;">Dapat berupa tangkapan layar (screenshot) transfer atau PDF mutasi.</small>
+            <small style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 4px;">Dapat berupa tangkapan layar (screenshot) transfer atau PDF mutasi.</small>
           </div>
         </div>
         <div class="modal-footer">
