@@ -187,8 +187,8 @@ const App = {
   },
 
   /**
-   * Upload berkas ke sistem penyimpanan (Telegram Bot Storage / Fallback)
-   * Dilengkapi validasi ketat sesuai kemampuan Bot Telegram:
+   * Upload berkas ke sistem penyimpanan cloud
+   * Dilengkapi validasi berkas:
    * - Maksimal Foto: 10 MB
    * - Maksimal Dokumen: 20 MB
    */
@@ -202,15 +202,15 @@ const App = {
     const MAX_PHOTO_MB = 10;
     const MAX_DOC_MB = 20;
 
-    // Validasi kemampuan Telegram Bot di sisi klien
+    // Validasi ukuran berkas di sisi klien
     if (isImage && file.size > MAX_PHOTO_MB * 1024 * 1024) {
       const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      throw new Error(`Ukuran foto (${sizeMB} MB) melebihi batas Telegram Bot API (maksimal ${MAX_PHOTO_MB} MB). Harap kompres foto terlebih dahulu.`);
+      throw new Error(`Ukuran foto (${sizeMB} MB) melebihi batas maksimal yang diizinkan (${MAX_PHOTO_MB} MB). Harap kompres foto terlebih dahulu.`);
     }
 
     if (!isImage && file.size > MAX_DOC_MB * 1024 * 1024) {
       const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      throw new Error(`Ukuran dokumen (${sizeMB} MB) melebihi batas unduh Telegram Bot (maksimal ${MAX_DOC_MB} MB).`);
+      throw new Error(`Ukuran dokumen (${sizeMB} MB) melebihi batas maksimal yang diizinkan (${MAX_DOC_MB} MB).`);
     }
 
     const formData = new FormData();
@@ -517,10 +517,10 @@ const App = {
             </div>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Foto Profil (Maks. 10 MB - Sesuai Limit Telegram Bot)</label>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Foto Profil (Format JPG/PNG/WEBP, Maks. 10 MB)</label>
             <input type="file" id="register-foto-input" class="form-control" accept="image/*">
             <input type="hidden" name="foto_profil" id="register-foto-url">
-            <small style="color: var(--text-muted); font-size: 0.72rem;">Otomatis disimpan via Telegram Bot API Storage.</small>
+            <small style="color: var(--text-muted); font-size: 0.72rem;">Format berkas gambar JPG, PNG, atau WEBP.</small>
           </div>
           <div>
             <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Password Akun *</label>

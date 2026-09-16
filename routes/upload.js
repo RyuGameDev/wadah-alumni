@@ -43,7 +43,7 @@ const handleUpload = (req, res, next) => {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.status(400).json({
           success: false,
-          message: `Ukuran berkas melebihi batas kemampuan bot Telegram (maksimal 20 MB). Silakan perkecil ukuran berkas Anda.`,
+          message: `Ukuran berkas melebihi batas maksimal yang diizinkan (20 MB). Silakan perkecil ukuran berkas Anda.`,
         });
       }
       return res.status(400).json({ success: false, message: `Kesalahan unggah: ${err.message}` });
@@ -55,12 +55,12 @@ const handleUpload = (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Tidak ada berkas yang diunggah.' });
     }
 
-    // Validasi khusus foto: Telegram sendPhoto maksimal 10MB
+    // Validasi khusus foto: batas maksimal 10MB
     const isImage = req.file.mimetype.startsWith('image/');
     if (isImage && req.file.size > MAX_PHOTO_BYTES) {
       return res.status(400).json({
         success: false,
-        message: `Ukuran foto (${(req.file.size / 1024 / 1024).toFixed(2)} MB) melebihi batas kemampuan Telegram Bot untuk foto (maksimal 10 MB). Silakan kompres foto Anda terlebih dahulu.`,
+        message: `Ukuran foto (${(req.file.size / 1024 / 1024).toFixed(2)} MB) melebihi batas maksimal yang diizinkan (10 MB). Silakan kompres foto Anda terlebih dahulu.`,
       });
     }
 
@@ -108,7 +108,7 @@ router.get('/:fileId', async (req, res) => {
     stream.pipe(res);
   } catch (err) {
     console.error(`Gagal streaming berkas media ${req.params.fileId}:`, err.message);
-    res.status(404).send('Berkas tidak ditemukan atau bot token Telegram belum dikonfigurasi.');
+    res.status(404).send('Berkas tidak ditemukan.');
   }
 });
 

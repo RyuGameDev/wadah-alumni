@@ -953,7 +953,7 @@ const Router = {
             </select>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Cover Foto (Maks 10MB - Sesuai Limit Telegram Bot)</label>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Cover Foto (Format JPG/PNG/WEBP, Maks 10MB)</label>
             <input type="file" id="news-cover-input" class="form-control" accept="image/*">
             <input type="hidden" name="cover_image">
           </div>
@@ -1227,7 +1227,7 @@ const Router = {
             <textarea name="pesan_doa" class="form-control" rows="3" placeholder="Tuliskan doa atau pesan untuk almamater dan adik kelas tercinta..."></textarea>
           </div>
           <div>
-            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Bukti Transfer (Maks. 20MB - Disimpan via Telegram Bot)</label>
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; margin-bottom: 6px; color: var(--navy-primary);">Bukti Transfer (Format JPG/PNG/PDF, Maks. 20MB)</label>
             <input type="file" id="donation-proof-input" class="form-control" accept="image/*,application/pdf">
             <small style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 4px;">Dapat berupa tangkapan layar (screenshot) transfer atau PDF mutasi.</small>
           </div>
@@ -1254,7 +1254,7 @@ const Router = {
       let telegramFileId = '';
 
       if (fileInput && fileInput.files.length > 0) {
-        submitBtn.innerText = 'Mengunggah bukti transfer ke bot...';
+        submitBtn.innerText = 'Mengunggah bukti transfer...';
         const uploadResult = await App.uploadFile(fileInput.files[0]);
         proofUrl = uploadResult.url;
         telegramFileId = uploadResult.fileId || '';
@@ -1652,7 +1652,7 @@ const Router = {
             </select>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Lampiran Gambar (Opsional, Maks 10MB via Telegram)</label>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Lampiran Gambar (Opsional, Maks 10MB)</label>
             <input type="file" id="forum-image-input" class="form-control" accept="image/*">
           </div>
           <div>
@@ -2069,7 +2069,7 @@ const Router = {
             <textarea name="bio" class="form-control" rows="2">${u.bio || ''}</textarea>
           </div>
           <div>
-            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Perbarui Foto Profil (Maks. 10MB - Sesuai Limit Telegram Bot)</label>
+            <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Perbarui Foto Profil (Format JPG/PNG/WEBP, Maks. 10MB)</label>
             <input type="file" id="edit-profile-photo-input" class="form-control" accept="image/*">
           </div>
         </div>
