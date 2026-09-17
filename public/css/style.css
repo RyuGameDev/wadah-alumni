@@ -2036,6 +2036,8 @@ button, input, select, textarea {
 .alumni-card-avatar {
   width: 76px;
   height: 76px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--gold-primary);
@@ -2381,12 +2383,29 @@ input[type="file"].form-control {
   -webkit-overflow-scrolling: touch;
 }
 
+.table-card-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .table-card-header {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 .table-custom {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.8125rem;
   text-align: left;
-  min-width: 600px;
+  min-width: 780px;
 }
 
 .table-custom th {
@@ -2404,8 +2423,29 @@ input[type="file"].form-control {
   vertical-align: middle;
 }
 
+.table-custom td:nth-child(2),
+.table-custom th:nth-child(2) {
+  min-width: 220px;
+}
+
 .table-custom tr:hover td {
   background: rgba(241, 245, 249, 0.6);
+}
+
+.table-avatar {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+  display: block;
+  border: 1.5px solid var(--border-color);
+  background: #f1f5f9;
 }
 
 .admin-badge {

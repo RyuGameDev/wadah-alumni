@@ -2228,7 +2228,7 @@ const Router = {
 
         <!-- Alumni Verification & Management Table -->
         <div style="background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); overflow: hidden;">
-          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+          <div class="table-card-header">
             <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--navy-primary);">
               Daftar Alumni & Status Verifikasi
             </h3>
@@ -2257,7 +2257,7 @@ const Router = {
                     <td>${idx + 1}</td>
                     <td>
                       <div style="display: flex; align-items: center; gap: 10px;">
-                        <img src="${a.foto_profil}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                        <img class="table-avatar" src="${a.foto_profil || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300'}" alt="${a.nama_lengkap}">
                         <div>
                           <strong>${a.nama_lengkap}</strong>
                           <div style="font-size: 0.72rem; color: var(--text-muted);">${a.email}</div>
