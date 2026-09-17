@@ -308,7 +308,7 @@ const App = {
               <span class="user-display-name">${u.nama_lengkap.split(' ')[0]}</span>
               <span class="user-display-badge">${roleLabel}</span>
             </div>
-            <span style="font-size: 0.7rem; color: var(--navy-medium);">▼</span>
+            <span class="user-caret" style="font-size: 0.7rem; color: var(--navy-medium);">▼</span>
           </div>
           <div id="user-dropdown-popover" class="dropdown-menu" style="right: 0; left: auto; top: 70px;">
             ${u.role === 'admin' ? `<a href="#admin" class="dropdown-item">🛠️ Panel Admin Sekolah</a>` : ''}

@@ -1359,7 +1359,7 @@ const Router = {
       </div>
       <form onsubmit="Router.handlePostCareerSubmit(event)">
         <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 70vh; overflow-y: auto;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2" style="margin-bottom: 2px;">
             <div>
               <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Posisi / Jabatan *</label>
               <input type="text" name="posisi" class="form-control" required placeholder="Contoh: Staff Keuangan">
@@ -1369,7 +1369,7 @@ const Router = {
               <input type="text" name="perusahaan" class="form-control" required placeholder="PT / CV / Lembaga">
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2">
             <div>
               <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Lokasi Penempatan *</label>
               <input type="text" name="lokasi" class="form-control" required placeholder="Jombang, Surabaya, Remote, dll">
@@ -1781,9 +1781,9 @@ const Router = {
 
           <form id="tracer-form" onsubmit="Router.handleTracerSubmit(event)">
             <!-- 1. IDENTITAS -->
-            <div style="background: var(--bg-main); padding: 18px; border-radius: var(--radius-md); margin-bottom: 24px;">
+            <div class="tracer-identity-box">
               <h4 style="font-size: 0.95rem; color: var(--navy-primary); margin-bottom: 12px; font-weight: 700;">1. Identitas Alumni</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem;">
+              <div class="form-grid-2" style="font-size: 0.85rem;">
                 <div><strong>Nama:</strong> ${App.state.user.nama_lengkap}</div>
                 <div><strong>NISN:</strong> ${App.state.user.nisn}</div>
                 <div><strong>Tahun Lulus:</strong> ${App.state.user.tahun_lulus}</div>
@@ -1804,9 +1804,9 @@ const Router = {
             </div>
 
             <!-- 2A. SECTION KULIAH -->
-            <div id="tracer-section-kuliah" style="margin-bottom: 24px; padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); ${status === 'Melanjutkan Studi' ? '' : 'display: none;'}">
+            <div id="tracer-section-kuliah" class="tracer-detail-card" style="${status === 'Melanjutkan Studi' ? '' : 'display: none;'}">
               <h4 style="font-size: 0.95rem; color: var(--navy-primary); margin-bottom: 14px; font-weight: 700;">Detail Perguruan Tinggi</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-grid-2" style="margin-bottom: 12px;">
                 <div>
                   <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama Perguruan Tinggi / Universitas</label>
                   <input type="text" name="kuliah_ptn" class="form-control" value="${kuliah.perguruan_tinggi || ''}" placeholder="Contoh: Universitas Brawijaya">
@@ -1816,7 +1816,7 @@ const Router = {
                   <input type="text" name="kuliah_fakultas" class="form-control" value="${kuliah.fakultas || ''}" placeholder="Contoh: Ilmu Komputer">
                 </div>
               </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-grid-2">
                 <div>
                   <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Program Studi</label>
                   <input type="text" name="kuliah_prodi" class="form-control" value="${kuliah.program_studi || ''}" placeholder="Contoh: Teknik Informatika">
@@ -1834,9 +1834,9 @@ const Router = {
             </div>
 
             <!-- 2B. SECTION KERJA -->
-            <div id="tracer-section-kerja" style="margin-bottom: 24px; padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); ${status === 'Bekerja' ? '' : 'display: none;'}">
+            <div id="tracer-section-kerja" class="tracer-detail-card" style="${status === 'Bekerja' ? '' : 'display: none;'}">
               <h4 style="font-size: 0.95rem; color: var(--navy-primary); margin-bottom: 14px; font-weight: 700;">Detail Pekerjaan</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-grid-2" style="margin-bottom: 12px;">
                 <div>
                   <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama Perusahaan / Instansi</label>
                   <input type="text" name="kerja_perusahaan" class="form-control" value="${kerja.nama_perusahaan || ''}" placeholder="Contoh: Bank Jatim Cabang Jombang">
@@ -1846,7 +1846,7 @@ const Router = {
                   <input type="text" name="kerja_jabatan" class="form-control" value="${kerja.jabatan || ''}" placeholder="Contoh: Staff Operasional">
                 </div>
               </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-grid-2">
                 <div>
                   <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Rentang Penghasilan / Gaji</label>
                   <select name="kerja_gaji" class="form-select">
@@ -1868,9 +1868,9 @@ const Router = {
             </div>
 
             <!-- 2C. SECTION WIRAUSAHA -->
-            <div id="tracer-section-usaha" style="margin-bottom: 24px; padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); ${status === 'Wirausaha' ? '' : 'display: none;'}">
+            <div id="tracer-section-usaha" class="tracer-detail-card" style="${status === 'Wirausaha' ? '' : 'display: none;'}">
               <h4 style="font-size: 0.95rem; color: var(--navy-primary); margin-bottom: 14px; font-weight: 700;">Detail Usaha Mandiri</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-grid-2" style="margin-bottom: 12px;">
                 <div>
                   <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama Usaha / Bisnis</label>
                   <input type="text" name="usaha_nama" class="form-control" value="${usaha.nama_usaha || ''}" placeholder="Contoh: Grida Roastery & Coffee">
@@ -2014,7 +2014,7 @@ const Router = {
             <!-- Detail Jejak Terdaftar -->
             <div style="background: #ffffff; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
               <h4 style="font-family: var(--font-heading); color: var(--navy-primary); font-size: 1.1rem; margin-bottom: 16px;">Informasi Aktivitas Terkini Anda</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.875rem;">
+              <div class="form-grid-2" style="font-size: 0.875rem;">
                 <div style="background: var(--bg-main); padding: 14px; border-radius: var(--radius-sm);">
                   <span style="color: var(--text-muted); font-size: 0.75rem;">Aktivitas:</span>
                   <div style="font-weight: 700; color: var(--navy-primary);">${u.status_saat_ini || 'Belum diisi'}</div>
@@ -2044,7 +2044,7 @@ const Router = {
             <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Nama Lengkap</label>
             <input type="text" name="nama_lengkap" class="form-control" value="${u.nama_lengkap}" required>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="form-grid-2">
             <div>
               <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">No. WhatsApp</label>
               <input type="text" name="no_telepon" class="form-control" value="${u.no_telepon || ''}">
@@ -2054,7 +2054,7 @@ const Router = {
               <input type="text" name="alamat" class="form-control" value="${u.alamat || ''}">
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="form-grid-2">
             <div>
               <label style="display: block; font-size: 0.775rem; font-weight: 700; margin-bottom: 4px;">Link LinkedIn</label>
               <input type="text" name="linkedin" class="form-control" value="${u.linkedin || ''}">
