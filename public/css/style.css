@@ -358,6 +358,7 @@ button, input, select, textarea {
 .brand-title span {
   background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1027,6 +1028,7 @@ button, input, select, textarea {
 .hero-title span {
   background: linear-gradient(135deg, #fef08a 20%, var(--gold-primary) 90%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -2686,6 +2688,7 @@ input[type="file"].form-control {
 .gallery-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 0.85rem;
